@@ -1,9 +1,10 @@
 module.exports = {
-    siteMetadata: {
-      title: `new`,
-        siteUrl: `https://www.yourdomain.tld`,
-    },
-    plugins: [
-
-    ]
-}
+  plugins: [
+    {
+      resolve: `gatsby-theme-codebushi`,
+      options: {
+        tailwindConfig: `tailwind.config.js`
+      }
+    }
+  ]
+};
