@@ -23,7 +23,7 @@ const Index = () => (
             offered services
           </p>
           <p className="mt-8 md:mt-12">
-            <Button size="lg">시작</Button>
+            <Button size="lg">다시 시작</Button>
           </p>
           <p className="mt-4 text-gray-600">Sed fermentum felis ut cursu</p>
         </div>
