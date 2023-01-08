@@ -1,151 +1,201 @@
-import React from 'react';
-import Button from '../components/Button';
-import Card from '../components/Card';
-import CustomerCard from '../components/CustomerCard';
-import LabelText from '../components/LabelText';
-import Layout from '../components/layout/Layout';
-import SplitSection from '../components/SplitSection';
-import StatsBox from '../components/StatsBox';
-import customerData from '../data/customer-data';
-import HeroImage from '../svg/HeroImage';
-import SvgCharts from '../svg/SvgCharts';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 
-const Index = () => (
-  <Layout>
-    <section className="pt-20 md:pt-40">
-      <div className="container mx-auto px-8 lg:flex">
-        <div className="text-center lg:text-left lg:w-1/2">
-          <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold leading-none">
-            상상이상
-          </h1>
-          <p className="text-xl lg:text-2xl mt-6 font-light">
-            Free landing page template to promote your business startup and generate leads for the
-            offered services
-          </p>
-          <p className="mt-8 md:mt-12">
-            <Button size="lg">다시 시작</Button>
-          </p>
-          <p className="mt-4 text-gray-600">Sed fermentum felis ut cursu</p>
-        </div>
-        <div className="lg:w-1/2">
-          <HeroImage />
-        </div>
-      </div>
-    </section>
-    <section id="features" className="py-20 lg:pb-40 lg:pt-48">
-      <div className="container mx-auto text-center">
-        <h2 className="text-3xl lg:text-5xl font-semibold">Main Features</h2>
-        <div className="flex flex-col sm:flex-row sm:-mx-3 mt-12">
-          <div className="flex-1 px-3">
-            <Card className="mb-8">
-              <p className="font-semibold text-xl">Service One</p>
-              <p className="mt-4">
-                An enim nullam tempor gravida donec enim ipsum blandit porta justo integer odio
-                velna vitae auctor integer.
-              </p>
-            </Card>
-          </div>
-          <div className="flex-1 px-3">
-            <Card className="mb-8">
-              <p className="font-semibold text-xl">Service Two</p>
-              <p className="mt-4">
-                An enim nullam tempor gravida donec enim ipsum blandit porta justo integer odio
-                velna vitae auctor integer.
-              </p>
-            </Card>
-          </div>
-          <div className="flex-1 px-3">
-            <Card className="mb-8">
-              <p className="font-semibold text-xl">Service Three</p>
-              <p className="mt-4">
-                An enim nullam tempor gravida donec enim ipsum blandit porta justo integer odio
-                velna vitae auctor integer.
-              </p>
-            </Card>
-          </div>
-        </div>
-      </div>
-    </section>
-    <SplitSection
-      id="services"
-      primarySlot={
-        <div className="lg:pr-32 xl:pr-48">
-          <h3 className="text-3xl font-semibold leading-tight">Market Analysis</h3>
-          <p className="mt-8 text-xl font-light leading-relaxed">
-            Our team of enthusiastic marketers will analyse and evaluate how your company stacks
-            against the closest competitors
-          </p>
-        </div>
-      }
-      secondarySlot={<SvgCharts />}
-    />
-    <SplitSection
-      reverseOrder
-      primarySlot={
-        <div className="lg:pl-32 xl:pl-48">
-          <h3 className="text-3xl font-semibold leading-tight">
-            Design And Plan Your Business Growth Steps
-          </h3>
-          <p className="mt-8 text-xl font-light leading-relaxed">
-            Once the market analysis process is completed our staff will search for opportunities
-            that are in reach
-          </p>
-        </div>
-      }
-      secondarySlot={<SvgCharts />}
-    />
-    <SplitSection
-      primarySlot={
-        <div className="lg:pr-32 xl:pr-48">
-          <h3 className="text-3xl font-semibold leading-tight">
-            Search For Performance Optimization
-          </h3>
-          <p className="mt-8 text-xl font-light leading-relaxed">
-            With all the information in place you will be presented with an action plan that your
-            company needs to follow
-          </p>
-        </div>
-      }
-      secondarySlot={<SvgCharts />}
-    />
-    <section id="stats" className="py-20 lg:pt-32">
-      <div className="container mx-auto text-center">
-        <LabelText className="text-gray-600">Our customers get results</LabelText>
-        <div className="flex flex-col sm:flex-row mt-8 lg:px-24">
-          <div className="w-full sm:w-1/3">
-            <StatsBox primaryText="+100%" secondaryText="Stats Information" />
-          </div>
-          <div className="w-full sm:w-1/3">
-            <StatsBox primaryText="+100%" secondaryText="Stats Information" />
-          </div>
-          <div className="w-full sm:w-1/3">
-            <StatsBox primaryText="+100%" secondaryText="Stats Information" />
-          </div>
-        </div>
-      </div>
-    </section>
-    <section id="testimonials" className="py-20 lg:py-40">
-      <div className="container mx-auto">
-        <LabelText className="mb-8 text-gray-600 text-center">What customers are saying</LabelText>
-        <div className="flex flex-col md:flex-row md:-mx-3">
-          {customerData.map(customer => (
-            <div key={customer.customerName} className="flex-1 px-3">
-              <CustomerCard customer={customer} />
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-    <section className="container mx-auto my-20 py-24 bg-gray-200 rounded-lg text-center">
-      <h3 className="text-5xl font-semibold">Ready to grow your business?</h3>
-      <p className="mt-8 text-xl font-light">
-        Quis lectus nulla at volutpat diam ut. Enim lobortis scelerisque fermentum dui faucibus in.
-      </p>
-      <p className="mt-8">
-        <Button size="xl">시작하세요!</Button>
-      </p>
-    </section>
-  </Layout>
+import {
+  LineChart,
+  Line,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Tooltip,
+} from 'recharts';
+
+import Layout from '@/components/layout';
+import CallToActionOne from '@/components/call-to-action-one';
+import Footer from '@/components/footer';
+import BlogHome from '@/components/blog-home';
+import ParallaxOne from '@/components/parallax-1';
+import ClientCarouselOne from '@/components/client-carousel-one';
+import TeamCarousel from '@/components/team-carousel';
+import FunfactOne from '@/components/funfact-one';
+import TrustedClient from '@/components/trusted-client';
+import PortfolioHome from '@/components/portfolio-home';
+import SubscribeForm from '@/components/subscribe-form';
+import ServiceTwo from '@/components/service-two';
+import AboutTwo from '@/components/about-two';
+import VideoTwo from '@/components/video-two';
+import HeaderOne from '@/components/header-one';
+import SearchContextProvider from '@/context/search-context';
+import MenuContextProvider from '@/context/menu-context';
+import SliderOne from '@/components/slider-one';
+
+// import { ClientSideRowModelModule } from "@ag-grid-community/client-side-row-model";
+import { localeKey } from '../lib/localeKey';
+
+import 'ag-grid-enterprise';
+import 'ag-grid-enterprise/dist/styles/ag-grid.css';
+import 'ag-grid-enterprise/dist/styles/ag-theme-alpine.css';
+
+import { AgGridReact, AgGridColumn } from 'ag-grid-react';
+import { LicenseManager } from 'ag-grid-enterprise';
+import { Col, Row } from 'react-bootstrap';
+
+import ValidationSample from '../test/ValidationSample';
+import ScollBox from '../test/ScrollBox';
+import IterationSample from '../test/IterationSample';
+import Info from '../test/Info';
+import Average from '../test/Average';
+import StyledComponent from '../test/StyledComponent';
+import App from '../test/App';
+
+LicenseManager.setLicenseKey(
+  'DownloadDevTools_COM_NDEwMjM0NTgwMDAwMA==59158b5225400879a12a96634544f5b6',
 );
 
-export default Index;
+const HomeOne = () => {
+  const data = [
+    { name: 'Page A', uv: 400, pv: 2400, amt: 2400 },
+    { name: 'Page B', uv: 1400, pv: 1400, amt: 1400 },
+    { name: 'Page C', uv: 400, pv: 2400, amt: 2400 },
+  ];
+
+  const containerStyle = useMemo(() => ({ width: '100%', height: '100%' }), []);
+  const gridStyle = useMemo(() => ({ height: '100%', width: '100%' }), []);
+  const [rowData, setRowData] = useState();
+  const [columnDefs, setColumnDefs] = useState([
+    // set filters
+    { field: 'athlete', filter: true },
+    { field: 'country', filter: 'agSetColumnFilter' },
+    // number filters
+    { field: 'gold', filter: 'agNumberColumnFilter' },
+    { field: 'silver', filter: 'agNumberColumnFilter' },
+    { field: 'bronze', filter: 'agNumberColumnFilter' },
+  ]);
+  const defaultColDef = useMemo(() => {
+    return {
+      flex: 1,
+      minWidth: 200,
+      resizable: true,
+      floatingFilter: true,
+    };
+  }, []);
+
+  const onGridReady = useCallback((params) => {
+    fetch('https://www.ag-grid.com/example-assets/olympic-winners.json')
+      .then((resp) => resp.json())
+      .then((data) => setRowData(data));
+  }, []);
+
+  const [box, setBox] = useState(null);
+  const [visible, setVisible] = useState(true);
+
+  // const validate = () => {
+  //   // var input = document.getElementById('password');
+  //   // input.className = '';
+  //   // if (input.value === '0000') {
+  //   //     input.className = 'success';
+  //   // } else {
+  //   //     input.className = 'failure';
+  //   // }
+  //   setClicked(true);
+  //   setValidated(password === '0000');
+  // }
+
+  // const [password, setPassword] = useState('');
+  // const [clicked, setClicked] = useState(false);
+  // const [validated, setValidated] = useState(false);
+
+  // const handleChange = (e) => {
+  //   setPassword(e.target.value);
+  // }
+
+  return (
+    <MenuContextProvider>
+      <SearchContextProvider>
+        <Layout PageTitle="와글와글">
+          {/* <input type='password' value={password} onChange={handleChange}
+            className={clicked ? (validated ? 'success':'failure') : ''}></input>
+          <button onClick={validate}>Validate</button> */}
+
+          <HeaderOne />
+          <SliderOne />
+
+          {/* <ValidationSample />
+          <ScollBox ref={(ref) => setBox(ref)} />
+          <button onClick={() => box.scrollToBottom()}>맨 밑으로</button> */}
+
+          {/* <IterationSample /> */}
+
+          <hr />
+
+          <App />
+
+          <hr />
+
+          <StyledComponent />
+          {/* <div>Hello!!!</div> */}
+
+          <hr />
+
+          {visible && <Average />}
+          <button
+            onClick={() => {
+              setVisible(!visible);
+            }}
+          >
+            {visible ? '숨기기' : '보이기'}
+          </button>
+
+          <hr />
+
+          <Row>
+            <Col>
+              <LineChart
+                width={600}
+                height={300}
+                data={data}
+                margin={{ top: 5, right: 20, bottom: 5, left: 0 }}
+              >
+                <Line type="monotone" dataKey="uv" stroke="#8884d8" />
+                <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+              </LineChart>
+            </Col>
+            <Col>
+              <div
+                className="ag-theme-alpine"
+                style={{ height: 300, width: '100%', paddingRight: 30 }}
+              >
+                <AgGridReact
+                  rowData={rowData}
+                  columnDefs={columnDefs}
+                  defaultColDef={defaultColDef}
+                  onGridReady={onGridReady}
+                ></AgGridReact>
+              </div>
+            </Col>
+          </Row>
+
+          <hr />
+
+          {/* <ServiceTwo /> */}
+          <AboutTwo />
+          <VideoTwo />
+          <SubscribeForm />
+          <PortfolioHome />
+          <FunfactOne />
+          <TrustedClient />
+          <TeamCarousel />
+          <ClientCarouselOne />
+          <ParallaxOne />
+          <BlogHome />
+          <CallToActionOne extraClassName="ready" />
+          <Footer />
+        </Layout>
+      </SearchContextProvider>
+    </MenuContextProvider>
+  );
+};
+
+export default HomeOne;
