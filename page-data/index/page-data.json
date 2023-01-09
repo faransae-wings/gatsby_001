@@ -1,1 +1,5 @@
-{"componentChunkName":"component---src-pages-index-jsx","path":"/","result":{"pageContext":{"breadcrumb":{"location":"/","crumbs":[{"pathname":"/","crumbLabel":"Home"}]}}},"staticQueryHashes":["1401112788","1425148981","1481202492","1711996544","1723796209","2467561228","2744905544","2847338574","336284845","469050083"]}
+{
+    "componentChunkName": "component---src-pages-index-js",
+    "path": "/",
+    "result": {"pageContext":{}},
+    "staticQueryHashes": []}

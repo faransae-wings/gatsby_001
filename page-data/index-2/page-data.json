@@ -1,1 +1,5 @@
-{"componentChunkName":"component---src-pages-index-2-jsx","path":"/index-2/","result":{"pageContext":{"breadcrumb":{"location":"/index-2/","crumbs":[{"pathname":"/","crumbLabel":"Home"},{"pathname":"/index-2","crumbLabel":"index-2"}]}}},"staticQueryHashes":["1255689755","2129895343","2744905544","3210512608","3283291546","3418155706","3558052429","469050083"]}
+{
+    "componentChunkName": "component---src-pages-index-2-js",
+    "path": "/index-2/",
+    "result": {"pageContext":{}},
+    "staticQueryHashes": []}
